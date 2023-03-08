@@ -49,3 +49,12 @@ if (hasWon)
     Console.Write("\nWell done! You guessed the word!");
 }
 else Console.Write($"\nSorry, you didn't guess the word. The word was '{targetWord}'.");
+
+// exit loop
+var keypressed = false;
+while (keypressed != true)
+{
+    Console.WriteLine("\n\nPress any key to exit.");
+    Console.ReadKey();
+    keypressed = true;
+}
