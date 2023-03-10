@@ -1,60 +1,72 @@
-﻿var words = File.ReadAllLines(".\\words.txt").Select(word => word.ToUpper()).ToArray();
+﻿var goAgain = true;
 
-var targetWord = words[Random.Shared.Next(words.Length)];
-
-var partialWord = new char[targetWord.Length];
-for (int i = 0; i < targetWord.Length; i++)
+while (goAgain == true)
 {
-    partialWord[i] = '_';
-}
+    var words = File.ReadAllLines(".\\words.txt").Select(word => word.ToUpper()).ToArray();
 
-var lives = 10;
-var hasWon = false;
+    var targetWord = words[Random.Shared.Next(words.Length)];
 
-while (lives != 0)
-{
-    Console.WriteLine(partialWord);
-    Console.Write($"You have {lives} lives left. Guess a letter: ");
-
-    var guess = char.ToUpper(Console.ReadKey().KeyChar);
-    Console.WriteLine();
-
-    /* if (partialWord.Contains(guess))
+    var partialWord = new char[targetWord.Length];
+    for (int i = 0; i < targetWord.Length; i++)
     {
-        haha code
-    } */
+        partialWord[i] = '_';
+    }
 
-    if (targetWord.Contains(guess))
+    var lives = 10;
+    var hasWon = false;
+
+    while (lives != 0)
     {
-        for (int i = 0; i < targetWord.Length; i++)
+        Console.Clear();
+        Console.WriteLine(partialWord);
+        Console.Write($"You have {lives} lives left. Guess a letter: ");
+
+        var guess = char.ToUpper(Console.ReadKey().KeyChar);
+        Console.WriteLine();
+
+        if (targetWord.Contains(guess))
         {
-            if (targetWord[i] == guess)
+            for (int i = 0; i < targetWord.Length; i++)
             {
-                partialWord[i] = targetWord[i];
+                if (targetWord[i] == guess)
+                {
+                    partialWord[i] = targetWord[i];
+                }
             }
+            Console.WriteLine("Correct!");
         }
-        Console.WriteLine("Correct!");
-    }
-    else lives--;
+        else lives--;
 
-    if (!partialWord.Contains('_'))
+        if (!partialWord.Contains('_'))
+        {
+            hasWon = true;
+            break;
+        }
+    }
+
+    if (hasWon)
     {
-        hasWon = true;
-        break;
+        Console.Clear();
+        Console.Write("\nWell done! You guessed the word!");
     }
-}
+    else
+    {
+        Console.Clear();
+        Console.Write($"\nSorry, you didn't guess the word. The word was '{targetWord}'.");
+    } 
 
-if (hasWon)
-{
-    Console.Write("\nWell done! You guessed the word!");
-}
-else Console.Write($"\nSorry, you didn't guess the word. The word was '{targetWord}'.");
+    Console.WriteLine("\n\nPlay Again? [y/n]: ");
+    var response = Console.ReadLine();
+    if (response == "y")
+    {
+        goAgain = true;
 
-// exit loop
-var keypressed = false;
-while (keypressed != true)
-{
-    Console.WriteLine("\n\nPress any key to exit.");
-    Console.ReadKey();
-    keypressed = true;
+    }
+    else
+    {
+        goAgain = false;
+
+    }
+
 }
+// dotnet publish -c Release -r win-x64 --self-contained
